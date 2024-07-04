@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- all the dependency files are included-->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,40 +22,47 @@
   </header>
   <div class="container">
     <div class="text-center mb-5">
+      <!-- Add Task Button-->
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
     <div class="row swim-lanes text-center justify-content-between">
+      <!-- to-do section-->
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">To Do</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="todo-cards"></div>
+            <div id="todo-cards"><!-- to-dos go here draggable--></div>
           </div>
         </div>
       </div>
+      <!-- to-dos end-->
+      <!-- in-progress section-->
       <div class="col-12 col-lg-4 d-flex">
         <div id="in-progress" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">In Progress</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="in-progress-cards"></div>
+            <div id="in-progress-cards"><!-- in-progress go here draggable --></div>
           </div>
         </div>
-        </div>
-        <div class="col-12 col-lg-4 d-flex">
-          <div id="done" class="card border-light mb-3 lane flex-grow-1">
-            <div class="card-header bg-white">
-              <h2 class="card-title mb-1">Done</h2>
-            </div>
-            <div class="card-body bg-light">
-              <div id="done-cards"></div>
-          </div>
-          </div>
       </div>
+      <!-- in-progress end-->
+      <!-- done section-->
+      <div class="col-12 col-lg-4 d-flex">
+        <div id="done" class="card border-light mb-3 lane flex-grow-1">
+          <div class="card-header bg-white">
+            <h2 class="card-title mb-1">Done</h2>
+          </div>
+          <div class="card-body bg-light">
+            <div id="done-cards"><!-- done go here draggable --></div>
+          </div>
+        </div>
+      </div>
+      <!-- done end-->
     </div>
   </div>
 
