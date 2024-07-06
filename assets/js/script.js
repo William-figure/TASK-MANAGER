@@ -3,6 +3,7 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 let nextId = JSON.parse(localStorage.getItem("nextId")) || 1;
+$("#task-due-date").datepicker();
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
   const taskId = nextId;
@@ -11,33 +12,82 @@ function generateTaskId() {
   return taskId;
 }
 
-const tName = $("input#task-title").val();
-const tDate = $("#task-due-date").val();
-const tDesc = $("#task-description").val();
-
-const task = {
-  taskId: generateTaskId,
-  taskName: tName,
-  taskDueDate: tDate,
-  taskDescription: tDesc
-};
-
-taskList.push(task);
-localStorage.setItem("tasks", JSON.stringify(taskList));
 // Todo: create a function to create a task card
-function createTaskCard(task) {}
+function createTaskCard(task) {
+  $("#todo-cards").append(
+    `
+      <div class="task-card card mb-3" data-task-id="${task.taskId}">
+        <div class="card-body">
+          <h5 class="card-title">${task.taskName}</h5>
+          <p class="card-text">Due: ${task.taskDueDate}</p>
+          <p class="card-text">${task.taskDescription}</p>
+          <button class="btn btn-danger delete-task">Delete</button>
+        </div>
+      </div>
+    `
+  )
+}
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {}
 
 // Todo: create a function to handle adding a new task
-function handleAddTask(event) {}
+function handleAddTask(event) {
+  event.preventDefault()
+}
 
 // Todo: create a function to handle deleting a task
-function handleDeleteTask(event) {}
+function handleDeleteTask(event) {
+  event.preventDefault()
+}
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {}
 
+//test the date input out only, since it is very crucial using date.js to format the date correctly, restrict user input as YYYY-MM-DD;
+function checkDate(Dt) {
+  const desiredDateFormat = "YYYY-MM-DD";
+  const parsedDate = dayjs(Dt, desiredDateFormat, true);
+  if (parsedDate.isValid()) {
+    const formattedDate = parsedDate.format(desiredDateFormat);
+    Dt = formattedDate;
+    return formattedDate;
+  } else {
+    const errMsg = "please use YYYY-MM-DD format!";
+    Dt = errMsg;
+  }
+}
+
+
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
-$(document).ready(function () {});
+$(document).ready(function () {
+  $("button[class=close]").click(() => {
+    // $(".modal").remove();
+    location.reload();
+  });
+  $("#add-task").click(() => {
+    const tName = $("#task-title").val();
+    $("#task-due-date").pointerEvents = "none";
+    $("#task-due-date").attr("autocomplete", "off");
+    let tDate = $("#task-due-date").val();
+    const tDesc = $("#task-description").val();
+    tDate = checkDate(tDate);
+    if (tName && tDate) {
+      const task = {
+        taskId: generateTaskId(),
+        taskName: tName,
+        taskDueDate: tDate,
+        taskDescription: tDesc
+      };
+      // console.log(task.taskDueDate);
+      taskList.push(task);
+      localStorage.setItem("tasks", JSON.stringify(taskList));
+      // console.log(localStorage);
+      // console.log(typeof createTaskCard(task));
+      // createTaskCard(task);
+    } else {
+      alert("please check the title or date!");
+    }
+    // console.log(task.taskName, task.taskDueDate, task.taskDescription);
+  });
+});
