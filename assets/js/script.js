@@ -39,8 +39,37 @@ function renderTaskList() {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event) {
-  event.preventDefault()
-}
+  $("button[class=close]").click(() => {
+    // $(".modal").remove();
+    location.reload();
+  });
+  $("#add-task").click(() => {
+    const tName = $("#task-title").val();
+    $("#task-due-date").pointerEvents = "none";
+    $("#task-due-date").attr("autocomplete", "off");
+    let tDate = $("#task-due-date").val();
+    const tDesc = $("#task-description").val();
+    tDate = checkDate(tDate);
+    if (tName && tDate) {
+      const task = {
+        taskId: generateTaskId(),
+        taskName: tName,
+        taskDueDate: tDate,
+        taskDescription: tDesc
+      };
+      // console.log(task.taskDueDate);
+      taskList.push(task);
+      localStorage.setItem("tasks", JSON.stringify(taskList));
+      location.reload();
+      // console.log(localStorage);
+      // console.log(typeof createTaskCard(task));
+      // createTaskCard(task);
+    } else {
+      alert("please check the title or date!");
+    }
+    // console.log(task.taskName, task.taskDueDate, task.taskDescription);
+  });
+} 
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
@@ -68,33 +97,5 @@ function checkDate(Dt) {
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
   renderTaskList();
-  $("button[class=close]").click(() => {
-    // $(".modal").remove();
-    location.reload();
-  });
-  $("#add-task").click(() => {
-    const tName = $("#task-title").val();
-    $("#task-due-date").pointerEvents = "none";
-    $("#task-due-date").attr("autocomplete", "off");
-    let tDate = $("#task-due-date").val();
-    const tDesc = $("#task-description").val();
-    tDate = checkDate(tDate);
-    if (tName && tDate) {
-      const task = {
-        taskId: generateTaskId(),
-        taskName: tName,
-        taskDueDate: tDate,
-        taskDescription: tDesc
-      };
-      // console.log(task.taskDueDate);
-      taskList.push(task);
-      localStorage.setItem("tasks", JSON.stringify(taskList));
-      // console.log(localStorage);
-      // console.log(typeof createTaskCard(task));
-      // createTaskCard(task);
-    } else {
-      alert("please check the title or date!");
-    }
-    // console.log(task.taskName, task.taskDueDate, task.taskDescription);
-  });
+  handleAddTask();
 });
