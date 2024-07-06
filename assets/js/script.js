@@ -16,7 +16,7 @@ function generateTaskId() {
 function createTaskCard(task) {
   $("#todo-cards").append(
     `
-      <div class="task-card card mb-3" id="task${task.taskId}">
+      <div class="task-card draggable card mb-3" id="task${task.taskId}">
         <div class="card-body">
           <h5 class="card-title">${task.taskName}</h5>
           <p class="card-text">Due: ${task.taskDueDate}</p>
@@ -35,6 +35,7 @@ function renderTaskList() {
     createTaskCard(taskList[i]);
   }
   $(".task-card").draggable();
+  // $(".task-card").draggable({containment: "#todo-cards"});
 }
 
 // Todo: create a function to handle adding a new task
@@ -85,7 +86,14 @@ function handleDeleteTask(event) {
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {}
+function handleDrop(event, ui) {
+  $('#todo-cards').droppable({accept: ".task-card",
+    drop: function(event, ui) {
+        $(this).append(ui.draggable);
+    }});
+  $('#in-progress-cards').droppable({accept: "in-progress-cards"});
+  $('#done-cards').droppable({accept: "done-cards"});
+}
 
 //test the date input out only, since it is very crucial using date.js to format the date correctly, restrict user input as YYYY-MM-DD;
 function checkDate(Dt) {
