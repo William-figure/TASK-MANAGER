@@ -16,25 +16,25 @@ function generateTaskId() {
 function createTaskCard(task) {
   $("#todo-cards").append(
     `
-      <div class="task-card card mb-3" data-task-id="${task.taskId}">
+      <div class="task-card card mb-3" id="task${task.taskId}">
         <div class="card-body">
           <h5 class="card-title">${task.taskName}</h5>
           <p class="card-text">Due: ${task.taskDueDate}</p>
           <p class="card-text">${task.taskDescription}</p>
-          <button class="btn btn-danger delete-task">Delete</button>
+          <button class="btn btn-danger delete-task" id="delete${task.taskId}">Delete</button>
         </div>
       </div>
     `
-  )
+  );
 }
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
   console.log(taskList);
-  for(let i = 0; i < taskList.length; i++) {
+  for (let i = 0; i < taskList.length; i++) {
     createTaskCard(taskList[i]);
   }
-  $('.task-card').draggable();
+  $(".task-card").draggable();
 }
 
 // Todo: create a function to handle adding a new task
@@ -69,11 +69,19 @@ function handleAddTask(event) {
     }
     // console.log(task.taskName, task.taskDueDate, task.taskDescription);
   });
-} 
+}
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
-  event.preventDefault()
+  for (let i = 0; i < taskList.length; i++) {
+    $(`#delete${taskList[i].taskId}`).click(() => {
+      $(`#task${taskList[i].taskId}`).remove();
+      taskList = taskList.filter(item => item.taskId !== taskList[i].taskId);
+      console.log(taskList);
+      localStorage.setItem("tasks", JSON.stringify(taskList));
+      location.reload();
+    });
+  }
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
@@ -93,9 +101,9 @@ function checkDate(Dt) {
   }
 }
 
-
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
   renderTaskList();
   handleAddTask();
+  handleDeleteTask();
 });
