@@ -14,32 +14,42 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-  $("#todo-cards").append(
-    `
-      <div style="z-index:0" class="task-card draggable card mb-3" id="task${task.taskId}">
-        <div class="card-body">
-          <h5 class="card-title">${task.taskName}</h5>
-          <p class="card-text">Due: ${task.taskDueDate}</p>
-          <p class="card-text">${task.taskDescription}</p>
-          <button class="btn btn-danger delete-task" id="delete${task.taskId}">Delete</button>
-        </div>
+  return `
+    <li style="background-color:${task.taskColor}; z-index:2;" class="ui-state-default task-card card mb-3" id="task${task.taskId}">
+      <div class="card-body">
+        <h5 class="card-title">${task.taskName}</h5>
+        <hr>
+        <p class="card-text">Due: ${task.taskDueDate}</p>
+        <p class="card-text">${task.taskDescription}</p>
+        <button class="btn btn-danger delete-task" id="delete${task.taskId}">Delete</button>
       </div>
-    `
-  );
+    </li>
+  `;
 }
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-  console.log(taskList);
+  // Append tasks to respective columns based on their state
   for (let i = 0; i < taskList.length; i++) {
-    createTaskCard(taskList[i]);
+    const taskCardHtml = createTaskCard(taskList[i]);
+    $("#arrange-1").append(taskCardHtml);
   }
-  $(".draggable").draggable({
-    revert: true, // Snap back if not dropped on a droppable
-    cursor: "move", // Change cursor while dragging
-    containment: ".col-12 col-lg-4 d-flex" // Restrict dragging within document
+
+  $(".task-card").draggable({
+    cursor: "grabbing",
+    opacity: 0.5,
+    connectToSortable: ".con",
+    revert: "invalid",
+    start: function(event, ui) {
+      ui.helper.css("z-index", 1000);
+    }
   });
-  // $(".task-card").draggable({containment: "#todo-cards"});
+
+  // Make columns sortable and connect them
+  $(".con")
+    .sortable({
+    })
+    .disableSelection();
 }
 
 // Todo: create a function to handle adding a new task
@@ -49,14 +59,27 @@ function handleAddTask(event) {
     location.reload();
   });
   $("#add-task").click(() => {
+    const todayDate = dayjs().format("YYYY-MM-DD");
     const tName = $("#task-title").val();
     $("#task-due-date").pointerEvents = "none";
     $("#task-due-date").attr("autocomplete", "off");
     let tDate = $("#task-due-date").val();
     const tDesc = $("#task-description").val();
     tDate = checkDate(tDate);
+    let dueDate = dayjs(tDate);
+    let toDate = dayjs(todayDate);
+    let tColor = "";
+    if (dueDate.isBefore(toDate)) {
+      tColor = "red";
+    } else if (dueDate.isAfter(toDate)) {
+      tColor = "green";
+    } else {
+      tColor = "orange";
+    }
+
     if (tName && tDate) {
       const task = {
+        taskColor: tColor,
         taskId: generateTaskId(),
         taskName: tName,
         taskDueDate: tDate,
@@ -66,13 +89,9 @@ function handleAddTask(event) {
       taskList.push(task);
       localStorage.setItem("tasks", JSON.stringify(taskList));
       location.reload();
-      // console.log(localStorage);
-      // console.log(typeof createTaskCard(task));
-      // createTaskCard(task);
     } else {
       alert("please check the title or date!");
     }
-    // console.log(task.taskName, task.taskDueDate, task.taskDescription);
   });
 }
 
@@ -90,13 +109,9 @@ function handleDeleteTask(event) {
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
-  $(".droppable").droppable({
-    accept: ".draggable", // Only accept elements with class .draggable
-    drop: function(event, ui) {
-        // Append the dragged element to the droppable container
-        $(this).append(ui.draggable);
-    }
+function handleDrop() {
+  $(".con").droppable({
+    accept: ".task-card"
   });
 }
 

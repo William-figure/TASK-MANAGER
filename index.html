@@ -59,15 +59,19 @@
       </div>
     </div>
     <!-- modal ends here -->
-    <div class="row swim-lanes text-center justify-content-between">
+    <div id="top-drag" class="row swim-lanes text-center justify-content-between">
       <!-- to-do section-->
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">To Do</h2>
           </div>
-          <div class="card-body bg-light">
-            <div id="todo-cards" class="droppable"><!-- to-dos go here draggable--></div>
+          <div id="todo-con" class="con card-body bg-light">
+            <div id="todo-cards" class="board"><!-- to-dos go here draggable-->
+              <ul id="arrange-1" class="connect">
+
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -78,8 +82,12 @@
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">In Progress</h2>
           </div>
-          <div class="card-body bg-light">
-            <div id="in-progress-cards" class="droppable"><!-- in-progress go here draggable --></div>
+          <div id="in-progress-con" class="con card-body bg-light">
+            <div id="in-progress-cards" class="board"><!-- in-progress go here draggable -->
+              <ul id="arrange-2" class="connect">
+
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -90,8 +98,12 @@
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">Done</h2>
           </div>
-          <div class="card-body bg-light">
-            <div id="done-cards" class="droppable"><!-- done go here draggable --></div>
+          <div id="done-con" class="con card-body bg-light">
+            <div id="done-cards" class="board"><!-- done go here draggable -->
+              <ul id="arrange-3" class="connect">
+
+              </ul>
+            </div>
           </div>
         </div>
       </div>
